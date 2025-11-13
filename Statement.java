@@ -1,12 +1,19 @@
 public abstract class Statement {
-    public abstract String value(Customer aCustomer);
 
-    protected String eachRentalString(Rental aRental) {
-        return "\t" + aRental.getMovie().getTitle() + "\t" + String.valueOf(aRental.getCharge()) + "\n";
+    public String value(Customer aCustomer) {
+        String result = headerString(aCustomer);
+        java.util.Enumeration rentals = aCustomer.getRentals();
+        while (rentals.hasMoreElements()) {
+            Rental each = (Rental) rentals.nextElement();
+            result += eachRentalString(each);
+        }
+        result += footerString(aCustomer);
+        return result;
     }
 
-    protected String footerString(Customer aCustomer) {
-        return "Amount owed is " + String.valueOf(aCustomer.getTotalCharge()) + "\n" +
-               "You earned " + String.valueOf(aCustomer.getTotalFrequentRenterPoints()) + " frequent renter points";
-    }
+    protected abstract String headerString(Customer aCustomer);
+
+    protected abstract String eachRentalString(Rental aRental);
+
+    protected abstract String footerString(Customer aCustomer);
 }
